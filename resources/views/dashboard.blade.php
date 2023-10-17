@@ -19,7 +19,7 @@
                                 <h4>Uang Masuk</h4>
                             </div>
                             <div class="card-body">
-                                {{ moneyFormat($penjualan) }}
+                                {{ moneyFormat($pemasukan) }}
                             </div>
                         </div>
                     </div>
@@ -34,7 +34,7 @@
                                 <h4>Uang Keluar</h4>
                             </div>
                             <div class="card-body">
-                                {{ moneyFormat($pembelian) }}
+                                {{ moneyFormat($pengeluaran) }}
                             </div>
                         </div>
                     </div>

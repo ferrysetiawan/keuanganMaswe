@@ -38,7 +38,7 @@ class PenjualanController extends Controller
 
     public function all()
     {
-        $emps = Penjualan::all();
+        $emps = Penjualan::orderBy('tanggal','desc')->get();
         $output = '';
         $p = 1;
         if ($emps->count() > 0) {

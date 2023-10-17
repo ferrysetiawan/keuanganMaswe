@@ -34,7 +34,7 @@ class PembelianController extends Controller
     {
 
         // <td><img src="/storage/images/' . $emp->image . '" width="50" class="img-thumbnail rounded-circle"></td>
-        $emps = Pembelian::all();
+        $emps = Pembelian::orderBy('tanggal','desc')->get();
         $output = '';
         $p = 1;
         if ($emps->count() > 0) {

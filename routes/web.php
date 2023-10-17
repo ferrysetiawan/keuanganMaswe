@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BE\DashboardController;
 use App\Http\Controllers\BE\KategoriInController;
 use App\Http\Controllers\BE\KategoriOutController;
 use App\Http\Controllers\BE\KolamController;
@@ -32,9 +33,7 @@ Route::get('/', function () {
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::group(['prefix' =>'dashboard', 'middleware' => ['auth']],function(){
-    Route::get('/', function(){
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::prefix('user')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('user');
         Route::post('/store', [UserController::class, 'store'])->name('user-store');

@@ -19,7 +19,7 @@
                                 <h4>Uang Masuk</h4>
                             </div>
                             <div class="card-body">
-                                42
+                                {{ moneyFormat($penjualan) }}
                             </div>
                         </div>
                     </div>
@@ -34,7 +34,7 @@
                                 <h4>Uang Keluar</h4>
                             </div>
                             <div class="card-body">
-                                1,201
+                                {{ moneyFormat($pembelian) }}
                             </div>
                         </div>
                     </div>
@@ -49,7 +49,7 @@
                                 <h4>Total</h4>
                             </div>
                             <div class="card-body">
-                                47
+                                {{ moneyFormat($total) }}
                             </div>
                         </div>
                     </div>
@@ -61,10 +61,10 @@
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Total User</h4>
+                                <h4>Total Kg</h4>
                             </div>
                             <div class="card-body">
-                                10
+                                {{ $totalKg }}
                             </div>
                         </div>
                     </div>

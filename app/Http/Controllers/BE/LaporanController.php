@@ -30,7 +30,7 @@ class LaporanController extends Controller
         $pembelian = Pembelian::whereBetween('tanggal', [$dateStart,$dateEnd])->get();
         $pengeluaran = $pembelian->sum('total');
         $pemasukan = $penjualan->sum('total');
-        $totalKg = Penjualan::whereBetween('tanggal', [$dateStart,$dateEnd])->where('kategori_id','!=', 6)->sum('qty');
+        $totalKg = Penjualan::whereBetween('tanggal', [$dateStart,$dateEnd])->where('kategori_id','!=', 3)->sum('qty');
         $total = $pemasukan - $pengeluaran;
 
         return view('be.laporan.index', compact('dateStart', 'dateEnd','start','end','pembelian','penjualan','pemasukan','pengeluaran', 'total', 'totalKg'));

@@ -26,6 +26,7 @@
         </tr>
         <tr>
             <th width="200%" style="font-size: 12px;font-weight: bold">No</th>
+            <th width="200%" style="font-size: 12px;font-weight: bold">Tanggal</th>
             <th width="200%" style="font-size: 12px;font-weight: bold">Pembeli</th>
             <th width="200%" style="font-size: 12px;font-weight: bold">Kolam</th>
             <th width="200%" style="font-size: 12px;font-weight: bold">Kelas</th>
@@ -38,6 +39,7 @@
         @foreach ($penjualan as $no=>$item)
             <tr>
                 <td>{{ $no + 1 }}</td>
+                <td>{{ $item->tanggal }}</td>
                 <td>{{ $item->pembeli }}</td>
                 <td>
                     @foreach ($item->kolam as $i)
@@ -63,6 +65,7 @@
         </tr>
         <tr>
             <th width="200%" style="font-size: 12px;font-weight: bold">No</th>
+            <th width="200%" style="font-size: 12px;font-weight: bold">Tanggal</th>
             <th width="200%" style="font-size: 12px;font-weight: bold">Uraian</th>
             <th width="200%" style="font-size: 12px;font-weight: bold">Kategori</th>
             <th width="200%" style="font-size: 12px;font-weight: bold">Total</th>
@@ -72,6 +75,7 @@
         @foreach ($pembelian as $no=>$item)
             <tr>
                 <td>{{ $no + 1 }}</td>
+                <td>{{ $item->tanggal }}</td>
                 <td>{{ $item->keterangan }}</td>
                 <td>{{ $item->kategori->nama_kategori }}</td>
                 <td style="text-align: right">{{ moneyFormat($item->total) }}</td>

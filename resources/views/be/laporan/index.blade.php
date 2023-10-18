@@ -99,6 +99,7 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
+                                            <th>Tanggal</th>
                                             <th>Pembeli</th>
                                             <th>Kolam</th>
                                             <th>Kelas</th>
@@ -111,6 +112,7 @@
                                         @foreach ($penjualan as $no=>$item)
                                             <tr>
                                                 <td>{{ $no + 1 }}</td>
+                                                <td>{{ $item->tanggal }}</td>
                                                 <td>{{ $item->pembeli }}</td>
                                                 <td>
                                                     @foreach ($item->kolam as $i)
@@ -140,6 +142,7 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
+                                            <th>Tanggal</th>
                                             <th>Uraian</th>
                                             <th>Kategori</th>
                                             <th>Total</th>
@@ -149,6 +152,7 @@
                                         @foreach ($pembelian as $no=>$item)
                                             <tr>
                                                 <td>{{ $no + 1 }}</td>
+                                                <td>{{ $item->tanggal }}</td>
                                                 <td>{{ $item->keterangan }}</td>
                                                 <td>{{ $item->kategori->nama_kategori }}</td>
                                                 <td>{{ moneyFormat($item->total) }}</td>

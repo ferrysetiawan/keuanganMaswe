@@ -35,6 +35,10 @@
                     <span>Laporan</span></a>
             </li>
             <li class="menu-header">PENGATURAN</li>
+            <li class="nav-item {{ request()->is('dashboard/role*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('role') }}"><i class="fas fa-user"></i>
+                    <span>Role</span></a>
+            </li>
             <li class="nav-item {{ request()->is('dashboard/user') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('user') }}"><i class="fas fa-user"></i>
                     <span>User</span></a>

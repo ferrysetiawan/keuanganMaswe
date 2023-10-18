@@ -8,6 +8,7 @@ use App\Http\Controllers\BE\LaporanController;
 use App\Http\Controllers\BE\PembelianController;
 use App\Http\Controllers\BE\PenjualanController;
 use App\Http\Controllers\BE\UserController;
+use App\Http\Controllers\BE\RoleController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -41,6 +42,15 @@ Route::group(['prefix' =>'dashboard', 'middleware' => ['auth']],function(){
         Route::get('/edit', [UserController::class, 'edit'])->name('user-edit');
         Route::post('/update', [UserController::class, 'update'])->name('user-update');
         Route::delete('/delete', [UserController::class, 'delete'])->name('user-delete');
+    });
+    Route::prefix('role')->group(function(){
+        Route::get('/', [RoleController::class, 'index'])->name('role');
+        Route::get('/create', [RoleController::class, 'create'])->name('role-create');
+        Route::post('/store', [RoleController::class, 'store'])->name('role-store');
+        Route::get('/show/{id}', [RoleController::class, 'show'])->name('role-show');
+        Route::get('/edit/{id}', [RoleController::class, 'edit'])->name('role-edit');
+        Route::put('/update/{id}', [RoleController::class, 'update'])->name('role-update');
+        Route::delete('/delete/{id}', [RoleController::class, 'destroy'])->name('role-delete');
     });
     Route::group(['prefix' => 'master-data'], function(){
         Route::prefix('kolam')->group(function () {

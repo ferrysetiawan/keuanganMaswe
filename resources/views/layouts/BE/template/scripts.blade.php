@@ -20,6 +20,31 @@
   {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+  <script>
+    @if(session() -> has('success'))
+
+    Swal.fire({
+        icon: 'success',
+        title: 'BERHASIL!',
+        text: '{{ session('success') }}',
+        showConfirmButton: false,
+        timer: 3000
+    })
+
+    @elseif(session() -> has('error'))
+
+    Swal.fire({
+        icon: 'error',
+        text: 'GAGAL!',
+        title: '{{ session('error') }}',
+        showConfirmButton: false,
+        timer: 10000
+    })
+
+    @endif
+
+</script>
+
   <!-- JS Libraies -->
 
   <!-- Page Specific JS File -->

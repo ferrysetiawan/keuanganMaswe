@@ -26,7 +26,7 @@ class ReportExport implements FromView
         $pembelian = Pembelian::whereBetween('tanggal', [$this->dateStart,$this->dateEnd])->get();
         $pengeluaran = $pembelian->sum('total');
         $pemasukan = $penjualan->sum('total');
-        $totalKg = Penjualan::whereBetween('tanggal', [$this->dateStart,$this->dateEnd])->where('kategori_id','!=', 6)->sum('qty');
+        $totalKg = Penjualan::whereBetween('tanggal', [$this->dateStart,$this->dateEnd])->where('kategori_id','!=', 3)->sum('qty');
         $total = $pemasukan - $pengeluaran;
         return view('be.laporan.cetak',[
             'penjualan' => $penjualan,

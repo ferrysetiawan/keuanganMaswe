@@ -47,7 +47,7 @@ class LaporanController extends Controller
         $pembelian = Pembelian::whereBetween('tanggal', [$dateStart,$dateEnd])->get();
         $pengeluaran = $pembelian->sum('total');
         $pemasukan = $penjualan->sum('total');
-        $totalKg = Penjualan::whereBetween('tanggal', [$dateStart,$dateEnd])->where('kategori_id','!=', 6)->sum('qty');
+        $totalKg = Penjualan::whereBetween('tanggal', [$dateStart,$dateEnd])->where('kategori_id','!=', 3)->sum('qty');
         $total = $pemasukan - $pengeluaran;
 
         $timestamp = now()->format('Y-m-d_H-i-s'); // Menggunakan timestamp saat ini

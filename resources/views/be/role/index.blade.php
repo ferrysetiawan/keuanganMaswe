@@ -14,8 +14,10 @@
                         <div class="card shadow">
                             <div class="card-header bg-primary d-flex justify-content-between align-items-center">
                                 <h3 class="text-light">Data Role</h3>
-                                <a class="btn btn-light" href="{{ route('role-create') }}"><i
+                                @can('role_create')
+                                    <a class="btn btn-light" href="{{ route('role-create') }}"><i
                                         class="bi-plus-circle me-2"></i>Tambah Role</a>
+                                @endcan
                             </div>
                             <div class="">
                                 <div class="card-body">
@@ -28,20 +30,26 @@
                                                 {{ $role->name }}
                                             </label>
                                             <div>
-                                                <!-- detail -->
+                                                   <!-- detail -->
                                                 <a href="{{ route('role-show', $role->id) }}" class="btn btn-sm btn-success"
                                                     role="button">
                                                     Detail
                                                 </a>
-                                                <!-- edit -->
-                                                <a href="{{ route('role-edit', $role->id) }}" class="btn btn-sm btn-warning"
-                                                    role="button">
-                                                    Ubah
-                                                </a>
-                                                <!-- delete -->
-                                                <button onclick="destroy(this.id)" id="{{$role->id}}" class="btn btn-sm btn-danger">
-                                                    Hapus
-                                                </button>
+                                                @can('role_edit')
+                                                    <!-- edit -->
+                                                    <a href="{{ route('role-edit', $role->id) }}" class="btn btn-sm btn-warning"
+                                                        role="button">
+                                                        Ubah
+                                                    </a>
+                                                @endcan
+                                                @can('role_destroy')
+                                                    <!-- delete -->
+                                                    <button onclick="destroy(this.id)" id="{{$role->id}}" class="btn btn-sm btn-danger">
+                                                        Hapus
+                                                    </button>
+                                                @endcan
+
+
                                             </div>
                                         </li>
                                         @empty

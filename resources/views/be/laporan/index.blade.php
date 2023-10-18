@@ -10,6 +10,7 @@
                 <h1>Laporan Tanggal {{ $start .' - '. $end }}</h1>
                 <span class="ml-auto">
                     <form autocomplete="off" action="{{ route('laporan') }}" method="GET" class="form-inline" id="date-range-form">
+                        @can('laporan_create')
                         <div class="form-group">
                             <div class="input-group">
                                 <input type="hidden" id="start" value="{{ $start }}">
@@ -20,7 +21,11 @@
                             </div>
                             </div>
                         </div>
+                        @endcan
+                        @can('laporan_download')
                         <a href="{{ url('/dashboard/laporan/export/'. $dateStart . '+' . $dateEnd) }}" class="btn btn-success ml-2 py-2">Export</a>
+                        @endcan
+
                     </form>
 
                 </span>

@@ -167,8 +167,11 @@
                         <div class="card shadow">
                             <div class="card-header bg-primary d-flex justify-content-between align-items-center">
                                 <h3 class="text-light">Tabel Penjualan</h3>
-                                <button id="tambahPenjualan" class="btn btn-light" data-toggle="modal" data-target="#add_TU_modal"><i
-                                        class="bi-plus-circle me-2"></i>Tambah Penjualan</button>
+                                @can('penjualan-create')
+                                    <button id="tambahPenjualanModal" class="btn btn-light" data-toggle="modal" data-target="#add_TU_modal"><i
+                                            class="bi-plus-circle me-2"></i>Tambah Penjualan</button>
+
+                                @endcan
                             </div>
                             <div class="">
                                 <div class="card-body" id="TU_all">

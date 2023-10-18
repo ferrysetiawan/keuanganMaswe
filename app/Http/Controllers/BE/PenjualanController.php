@@ -10,9 +10,20 @@ use App\Models\Penjualan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Models\Permission;
 
 class PenjualanController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:penjualan_index',['only' => ['index','all']]);
+        $this->middleware('permission:penjualan_create',['only' => ['store','getKolam','getCategories']]);
+        $this->middleware('permission:penjualan_detail',['only' => 'show','getKolam','getCategories']);
+        $this->middleware('permission:penjualan_edit',['only' => ['edit','update']]);
+        $this->middleware('permission:penjualan_destroy',['only' => 'delete']);
+
+    }
+
     public function index()
     {
         return view("be.penjualan.index");
@@ -41,6 +52,7 @@ class PenjualanController extends Controller
         $emps = Penjualan::orderBy('tanggal','desc')->get();
         $output = '';
         $p = 1;
+        $showAction = false; // Inisialisasi variabel untuk menentukan apakah harus menampilkan teks "Action"
         if ($emps->count() > 0) {
             $output .= '<table class="table table-bordered table-md" style="width:100%">
             <thead>
@@ -68,14 +80,29 @@ class PenjualanController extends Controller
                 <td>' . $emp->qty . '</td>
                 <td>' . $emp->unit . '</td>
                 <td>' . $emp->harga . '</td>
-                <td>' . moneyFormat($emp->total) . '</td>
-                <td>
-                  <a href="#" data-id="' . $emp->id . '" class="text-success mx-1 editIcon" data-toggle="modal" data-target="#editKIModal"><i class="ion-edit h4" data-pack="default" data-tags="on, off"></i></a>
-                  <a href="#" id="' . $emp->id . '" class="text-danger mx-1 deleteIcon"><i class="ion-trash-a h4" data-pack="default" data-tags="on, off"></i></a>
-                </td>
-              </tr>';
+                <td>' . moneyFormat($emp->total) . '</td>';
+
+                if (auth()->user()->can('penjualan_edit') || auth()->user()->can('penjualan_destroy')) {
+                    $output .= '<td>';
+                    if (auth()->user()->can('penjualan_edit')) {
+                        $output .= '<a href="#" id="' . $emp->id . '" class="text-success mx-1 editIcon" data-toggle="modal" data-target="#editKIModal"><i class="ion-edit h4" data-pack="default" data-tags="on, off"></i></a>';
+                        $showAction = true; // Setel ke true jika tombol edit tampil
+                    }
+
+                    if (auth()->user()->can('penjualan_destroy')) {
+                        $output .= '<a href="#" id="' . $emp->id . '" class="text-danger mx-1 deleteIcon"><i class="ion-trash-a h4" data-pack="default" data-tags="on, off"></i></a>';
+                        $showAction = true; // Setel ke true jika tombol delete tampil
+                    }
+                    $output .= '</td>';
+                }
+                $output .= '</tr>';
+
             }
             $output .= '</tbody></table>';
+            if (!$showAction) {
+                // Jika tidak ada tombol edit atau delete, maka teks "Action" akan dihilangkan
+                $output = str_replace('<th>Action</th>', '', $output);
+            }
             echo $output;
         } else {
             echo '<h1 class="text-center text-secondary my-5">No record present in the database!</h1>';

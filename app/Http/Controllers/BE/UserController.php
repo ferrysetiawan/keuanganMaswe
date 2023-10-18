@@ -14,6 +14,13 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:user_index',['only' => ['index']]);
+        $this->middleware('permission:user_create',['only' => ['create','store']]);
+        $this->middleware('permission:user_edit',['only' => ['edit','update']]);
+        $this->middleware('permission:user_destroy',['only' => 'destroy']);
+    }
 
     // set index page view
     public function index()
@@ -29,6 +36,7 @@ class UserController extends Controller
         $emps = User::all();
         $output = '';
         $p = 1;
+        $showAction = false; // Inisialisasi variabel untuk menentukan apakah harus menampilkan teks "Action"
         if ($emps->count() > 0) {
             $output .= '<table class="table table-bordered table-md" style="width:100%">
             <thead>
@@ -44,12 +52,26 @@ class UserController extends Controller
                 $output .= '<tr>
                 <td>' . $p++ . '</td>
                 <td>' . $emp->name . '</td>
-                <td>' . $emp->email . '</td>
-                <td>
-                  <a href="'. route('user-edit',$emp->id) .'" id="' . $emp->id . '" class="text-success mx-1"><i class="ion-edit h4" data-pack="default" data-tags="on, off"></i></a>
-                  <a href="#" id="' . $emp->id . '" class="text-danger mx-1 deleteIcon"><i class="ion-trash-a h4" data-pack="default" data-tags="on, off"></i></a>
-                </td>
-              </tr>';
+                <td>' . $emp->email . '</td>';
+
+                if (auth()->user()->can('user_edit') || auth()->user()->can('user_destroy')) {
+                    $output .= '<td>';
+                    if (auth()->user()->can('user_edit')) {
+                        $output .= '<a href="#" id="' . $emp->id . '" class="text-success mx-1 editIcon" data-toggle="modal" data-target="#editKIModal"><i class="ion-edit h4" data-pack="default" data-tags="on, off"></i></a>';
+                        $showAction = true; // Setel ke true jika tombol edit tampil
+                    }
+
+                    if (auth()->user()->can('user_destroy')) {
+                        $output .= '<a href="#" id="' . $emp->id . '" class="text-danger mx-1 deleteIcon"><i class="ion-trash-a h4" data-pack="default" data-tags="on, off"></i></a>';
+                        $showAction = true; // Setel ke true jika tombol delete tampil
+                    }
+                    $output .= '</td>';
+                }
+                $output .= '</tr>';
+            }
+            if (!$showAction) {
+                // Jika tidak ada tombol edit atau delete, maka teks "Action" akan dihilangkan
+                $output = str_replace('<th>Action</th>', '', $output);
             }
             $output .= '</tbody></table>';
             echo $output;

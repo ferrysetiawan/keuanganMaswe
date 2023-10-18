@@ -12,6 +12,13 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class LaporanController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:laporan_index',['only' => ['index']]);
+        $this->middleware('permission:laporan_search',['only' => ['index']]);
+        $this->middleware('permission:laporan_download',['only' => 'export']);
+    }
+
     public function index()
     {
         $start = Carbon::now()->startOfMonth()->format('m/d/Y');

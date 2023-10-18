@@ -14,6 +14,17 @@ class PembelianController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+     public function __construct()
+    {
+        $this->middleware('permission:pembelian_index',['only' => ['index','all']]);
+        $this->middleware('permission:pembelian_create',['only' => ['store','getCategories']]);
+        $this->middleware('permission:pembelian_detail',['only' => 'show','getCategories']);
+        $this->middleware('permission:pembelian_edit',['only' => ['edit','update']]);
+        $this->middleware('permission:pembelian_destroy',['only' => 'delete']);
+
+    }
+
     public function index()
     {
         return view('be.pembelian.index');
@@ -37,6 +48,7 @@ class PembelianController extends Controller
         $emps = Pembelian::orderBy('tanggal','desc')->get();
         $output = '';
         $p = 1;
+        $showAction = false; // Inisialisasi variabel untuk menentukan apakah harus menampilkan teks "Action"
         if ($emps->count() > 0) {
             $output .= '<table class="table table-bordered table-md" style="width:100%">
             <thead>
@@ -56,12 +68,28 @@ class PembelianController extends Controller
                 <td>' . $emp->tanggal . '</td>
                 <td>' . $emp->keterangan . '</td>
                 <td>' . $emp->kategori->nama_kategori . '</td>
-                <td>' . moneyFormat($emp->total) . '</td>
-                <td>
-                  <a href="#" data-id="' . $emp->id . '" class="text-success mx-1 editIcon" data-toggle="modal" data-target="#editTUModal"><i class="ion-edit h4" data-pack="default" data-tags="on, off"></i></a>
-                  <a href="#" id="' . $emp->id . '" class="text-danger mx-1 deleteIcon"><i class="ion-trash-a h4" data-pack="default" data-tags="on, off"></i></a>
-                </td>
-              </tr>';
+                <td>' . moneyFormat($emp->total) . '</td>';
+
+                if (auth()->user()->can('pembelian_edit') || auth()->user()->can('pembelian_destroy')) {
+                    $output .= '<td>';
+                    if (auth()->user()->can('pembelian_edit')) {
+                        $output .= '<a href="#" id="' . $emp->id . '" class="text-success mx-1 editIcon" data-toggle="modal" data-target="#editKIModal"><i class="ion-edit h4" data-pack="default" data-tags="on, off"></i></a>';
+                        $showAction = true; // Setel ke true jika tombol edit tampil
+                    }
+
+                    if (auth()->user()->can('pembelian_destroy')) {
+                        $output .= '<a href="#" id="' . $emp->id . '" class="text-danger mx-1 deleteIcon"><i class="ion-trash-a h4" data-pack="default" data-tags="on, off"></i></a>';
+                        $showAction = true; // Setel ke true jika tombol delete tampil
+                    }
+                    $output .= '</td>';
+                }
+                $output .= '</tr>';
+
+
+            }
+            if (!$showAction) {
+                // Jika tidak ada tombol edit atau delete, maka teks "Action" akan dihilangkan
+                $output = str_replace('<th>Action</th>', '', $output);
             }
             $output .= '</tbody></table>';
             echo $output;

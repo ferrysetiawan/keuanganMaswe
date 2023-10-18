@@ -57,7 +57,7 @@ class UserController extends Controller
                 if (auth()->user()->can('user_edit') || auth()->user()->can('user_destroy')) {
                     $output .= '<td>';
                     if (auth()->user()->can('user_edit')) {
-                        $output .= '<a href="#" id="' . $emp->id . '" class="text-success mx-1 editIcon" data-toggle="modal" data-target="#editKIModal"><i class="ion-edit h4" data-pack="default" data-tags="on, off"></i></a>';
+                        $output .= '<a href="'. route('user-edit',$emp->id) .'" id="' . $emp->id . '" class="text-success mx-1"><i class="ion-edit h4" data-pack="default" data-tags="on, off"></i></a>';
                         $showAction = true; // Setel ke true jika tombol edit tampil
                     }
 

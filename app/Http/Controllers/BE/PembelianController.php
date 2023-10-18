@@ -56,7 +56,7 @@ class PembelianController extends Controller
                 <td>' . $emp->tanggal . '</td>
                 <td>' . $emp->keterangan . '</td>
                 <td>' . $emp->kategori->nama_kategori . '</td>
-                <td>' . $emp->total . '</td>
+                <td>' . moneyFormat($emp->total) . '</td>
                 <td>
                   <a href="#" data-id="' . $emp->id . '" class="text-success mx-1 editIcon" data-toggle="modal" data-target="#editTUModal"><i class="ion-edit h4" data-pack="default" data-tags="on, off"></i></a>
                   <a href="#" id="' . $emp->id . '" class="text-danger mx-1 deleteIcon"><i class="ion-trash-a h4" data-pack="default" data-tags="on, off"></i></a>

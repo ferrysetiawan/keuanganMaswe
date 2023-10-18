@@ -68,7 +68,7 @@ class PenjualanController extends Controller
                 <td>' . $emp->qty . '</td>
                 <td>' . $emp->unit . '</td>
                 <td>' . $emp->harga . '</td>
-                <td>' . $emp->total . '</td>
+                <td>' . moneyFormat($emp->total) . '</td>
                 <td>
                   <a href="#" data-id="' . $emp->id . '" class="text-success mx-1 editIcon" data-toggle="modal" data-target="#editKIModal"><i class="ion-edit h4" data-pack="default" data-tags="on, off"></i></a>
                   <a href="#" id="' . $emp->id . '" class="text-danger mx-1 deleteIcon"><i class="ion-trash-a h4" data-pack="default" data-tags="on, off"></i></a>

@@ -36,7 +36,7 @@
             </li>
             <li class="menu-header">PENGATURAN</li>
             <li class="nav-item {{ request()->is('dashboard/role*') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('role') }}"><i class="fas fa-user"></i>
+                <a class="nav-link" href="{{ route('role') }}"><i class="fas fa-lock"></i>
                     <span>Role</span></a>
             </li>
             <li class="nav-item {{ request()->is('dashboard/user') ? 'active' : '' }}">

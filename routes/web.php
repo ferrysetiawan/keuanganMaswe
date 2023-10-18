@@ -39,9 +39,11 @@ Route::group(['prefix' =>'dashboard', 'middleware' => ['auth']],function(){
         Route::get('/', [UserController::class, 'index'])->name('user');
         Route::post('/store', [UserController::class, 'store'])->name('user-store');
         Route::get('/all', [UserController::class, 'all'])->name('user-all');
-        Route::get('/edit', [UserController::class, 'edit'])->name('user-edit');
-        Route::post('/update', [UserController::class, 'update'])->name('user-update');
+        Route::get('{id}/edit', [UserController::class, 'edit'])->name('user-edit');
+        Route::put('{id}/update', [UserController::class, 'update'])->name('user-update');
         Route::delete('/delete', [UserController::class, 'delete'])->name('user-delete');
+
+        Route::get('/get-role', [UserController::class, 'getRole'])->name('get-role');
     });
     Route::prefix('role')->group(function(){
         Route::get('/', [RoleController::class, 'index'])->name('role');

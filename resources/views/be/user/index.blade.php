@@ -22,6 +22,13 @@
                             </div>
 
                             <div class="my-2">
+                                <label for="role">Role</label>
+                                <select class="form-control" name="role" id="role">
+                                    <option value="">Pilih Role</option>
+                                </select>
+                            </div>
+
+                            <div class="my-2">
                                 <label for="password">Password</label>
                                 <input type="text" name="password" id="passwordInsert" class="form-control"
                                     placeholder="Masukan Password">
@@ -56,46 +63,6 @@
             </div>
         </div>
 
-        <div class="modal fade" id="editTUModal" tabindex="-1" aria-labelledby="exampleModalLabel" data-backdrop="static"
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Edit</h5>
-                    </div>
-                    <form action="#" method="POST" id="edit_TU_form" enctype="multipart/form-data">
-                        @csrf
-                        <input type="hidden" name="id" id="id">
-                        <div class="modal-body">
-                            <div class="my-2">
-                                <label for="name">Name</label>
-                                <input type="text" id="name" name="name" class="form-control"
-                                    placeholder="Masukan Nama">
-                            </div>
-
-                            <div class="my-2">
-                                <label for="email">Email</label>
-                                <input type="email" id="email" name="email" class="form-control"
-                                    placeholder="Masukan Email">
-                            </div>
-
-                            <div class="my-2">
-                                <label for="password">Password</label>
-                                <input type="password" id="password" name="password" class="form-control"
-                                    placeholder="Masukan Password">
-                                <button type="button" class="btn btn-info mt-2" id="togglePassword">Tampilkan
-                                    Password</button>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" id="edit_TU_btn" class="btn btn-success">Update</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
         <section class="section">
             <div class="section-header">
                 <h1>Halaman User</h1>
@@ -106,7 +73,7 @@
                         <div class="card shadow">
                             <div class="card-header bg-primary d-flex justify-content-between align-items-center">
                                 <h3 class="text-light">Tabel User</h3>
-                                <button class="btn btn-light" data-toggle="modal" data-target="#add_TU_modal"><i
+                                <button id="tambahUser" class="btn btn-light" data-toggle="modal" data-target="#add_TU_modal"><i
                                         class="bi-plus-circle me-2"></i>Tambah User</button>
                             </div>
                             <div class="">
@@ -130,6 +97,7 @@
                 var _token = $("input[name='_token']").val();
                 var name = $("input[name='name']").val();
                 var email = $("input[name='email']").val();
+                var role = $("select[name='role']").val();
                 var password = $("input[name='password']").val();
 
                 // Hide the submit text and show the loading animation
@@ -143,6 +111,7 @@
                         _token: _token,
                         name: name,
                         email: email,
+                        role: role,
                         password: password
                     },
                     success: function(response) {
@@ -157,58 +126,6 @@
                             printErrorMsg(response.error);
                         }
                     }
-                });
-            });
-
-            $(document).on('click', '.editIcon', function(e) {
-                e.preventDefault();
-                let id = $(this).attr('id');
-                $.ajax({
-                    url: '{{ route('user-edit') }}',
-                    method: 'get',
-                    data: {
-                        id: id,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        $("#name").val(response.name);
-                        $("#email").val(response.email);
-                        $("#password").val(response.password_asli);
-                        $("#id").val(response.id);
-                    }
-                });
-            });
-            $("#edit_TU_form").submit(function(e) {
-                e.preventDefault();
-                var _token = $("input[name='_token']").val();
-                var id = $("#id").val();
-                var name = $("input[id='name']").val();
-                var email = $("input[id='email']").val();
-                var password = $("input[id='password']").val();
-                $("#edit_TU_btn").text('Updating...');
-                $.ajax({
-                    url: '{{ route('user-update') }}',
-                    method: 'post',
-                    data: {
-                        _token: _token,
-                        id: id,
-                        name: name,
-                        email: email,
-                        password: password
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        if ($.isEmptyObject(response.error)) {
-                            printSuccessMsg(response.success);
-                            $("#edit_TU_btn").text('Update');
-                            $("#edit_TU_form")[0].reset();
-                            $("#editTUModal").modal('hide');
-                            TU_all();
-                        } else {
-                            printErrorMsg(response.error);
-                            $("#edit_TU_btn").text('Update');
-                        }
-                    },
                 });
             });
 
@@ -279,6 +196,23 @@
             }
 
         });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $("#tambahUser").click(function() {
+                $.ajax({
+                    url: '{{ route('get-role') }}',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#role').empty();
+                        $.each(data, function (key, value) {
+                            $('#role').append('<option value="' + value.id + '">' + value.name + '</option>');
+                        })
+                    }
+                });
+            })
+        })
     </script>
     <script>
         // lihat password edit

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -45,7 +46,7 @@ class UserController extends Controller
                 <td>' . $emp->name . '</td>
                 <td>' . $emp->email . '</td>
                 <td>
-                  <a href="#" id="' . $emp->id . '" class="text-success mx-1 editIcon" data-toggle="modal" data-target="#editTUModal"><i class="ion-edit h4" data-pack="default" data-tags="on, off"></i></a>
+                  <a href="'. route('user-edit',$emp->id) .'" id="' . $emp->id . '" class="text-success mx-1"><i class="ion-edit h4" data-pack="default" data-tags="on, off"></i></a>
                   <a href="#" id="' . $emp->id . '" class="text-danger mx-1 deleteIcon"><i class="ion-trash-a h4" data-pack="default" data-tags="on, off"></i></a>
                 </td>
               </tr>';
@@ -55,6 +56,12 @@ class UserController extends Controller
         } else {
             echo '<h1 class="text-center text-secondary my-5">No record present in the database!</h1>';
         }
+    }
+
+    public function getRole()
+    {
+        $roles = Role::all();
+        return response()->json($roles);
     }
 
     // handle insert a new Tu ajax request
@@ -75,7 +82,8 @@ class UserController extends Controller
                 'password' => Hash::make($data['password']),
                 'password_asli' => $data['password']
             ];
-            User::create($empData);
+            $user = User::create($empData);
+            $user->assignRole($data['role']);
             return response()->json(['success' => 'Data berhasil ditambahkan']);
         } else {
             // dd('else');
@@ -84,15 +92,17 @@ class UserController extends Controller
     }
 
     // handle edit an Tu ajax request
-    public function edit(Request $request)
+    public function edit($id)
     {
-        $id = $request->id;
-        $emp = User::find($id);
-        return response()->json($emp);
+        $user = User::find($id);
+        return view('be.user.edit',[
+            'user' => $user,
+            'roles' => Role::all()
+        ]);
     }
 
     // handle update an Tu ajax request
-    public function update(InsertUserRequest $insertUserRequest, UpdateUserRequest $updateUserRequest)
+    public function update(UpdateUserRequest $updateUserRequest, $id)
     {
         // dd($updateUserRequest);
 
@@ -100,17 +110,10 @@ class UserController extends Controller
         $messageUpdate = $updateUserRequest->messages();
         $rulesUpdate = Arr::first($updateUserRequest->rules());
 
-        $requestInsert = $insertUserRequest->all();
-        $messageInsert = $insertUserRequest->messages();
-        $rulesInsert = Arr::first($insertUserRequest->rules());
 
+        $user = User::findOrFail($id);
+        $validator = Validator::make($requestUpdate, $messageUpdate, $rulesUpdate);
 
-        $emp = User::find($requestUpdate['id']);
-        if ($requestUpdate['email'] != $emp->email) {
-            $validator = Validator::make($requestInsert, $rulesInsert, $messageInsert);
-        } else {
-            $validator = Validator::make($requestUpdate, $rulesUpdate, $messageUpdate);
-        }
         if ($validator->passes()) {
             $empData = [
                 'name' => $requestUpdate['name'],
@@ -119,10 +122,11 @@ class UserController extends Controller
                 'password_asli' => $requestUpdate['password']
             ];
             // dd($request->all());
-            $emp->update($empData);
-            return response()->json(['success' => 'Data berhasil di ubah']);
+            $user->update($empData);
+            $user->syncRoles($requestUpdate['role']);
+            return redirect()->route('user')->with(['success' => 'Data berhasil diubah!']);
         } else {
-            return response()->json(['error' => $validator->errors()->all()]);
+            return redirect()->back()->with(['error' => $validator->errors()->all()]);
         }
     }
 

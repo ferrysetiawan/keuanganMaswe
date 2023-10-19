@@ -10,7 +10,7 @@
                 <h1>Laporan Tanggal {{ $start .' - '. $end }}</h1>
                 <span class="ml-auto">
                     <form autocomplete="off" action="{{ route('laporan') }}" method="GET" class="form-inline" id="date-range-form">
-                        @can('laporan_create')
+                        @can('laporan_search')
                         <div class="form-group">
                             <div class="input-group">
                                 <input type="hidden" id="start" value="{{ $start }}">

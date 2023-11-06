@@ -17,7 +17,7 @@ class PenjualanController extends Controller
     public function __construct()
     {
         $this->middleware('permission:penjualan_index',['only' => ['index','all']]);
-        $this->middleware('permission:penjualan_create',['only' => ['store','getKolam','getCategories']]);
+        $this->middleware('permission:penjualan_create',['only' => ['index','store','getKolam','getCategories']]);
         $this->middleware('permission:penjualan_detail',['only' => 'show','getKolam','getCategories']);
         $this->middleware('permission:penjualan_edit',['only' => ['edit','update']]);
         $this->middleware('permission:penjualan_destroy',['only' => 'delete']);

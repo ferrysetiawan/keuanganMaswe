@@ -170,7 +170,6 @@
                                 @can('penjualan_create')
                                     <button id="tambahPenjualanModal" class="btn btn-light" data-toggle="modal" data-target="#add_TU_modal"><i
                                             class="bi-plus-circle me-2"></i>Tambah Penjualan</button>
-
                                 @endcan
                             </div>
                             <div class="">
@@ -399,7 +398,7 @@
 
         // lihat password insert
         $(document).ready(function() {
-            $('#tambahPenjualan').click(function() {
+            $('#tambahPenjualanModal').click(function() {
                 $.ajax({
                     url: '{{ route('get-categories') }}',
                     type: 'GET',
